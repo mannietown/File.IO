@@ -45,6 +45,22 @@ namespace Project_1
             }
 
             return ReturnValue;
+
+        }
+
+
+        public static void WriteDataToFile(List<string> list)
+        {
+            if (Directory.Exists(AppDataFolder))
+            {
+                using(StreamWriter sw = new StreamWriter(DatabaseFileLocation))
+                {
+                    foreach(string data in LoadDataFromFile())
+                    {
+                        sw.WriteLine(data);
+                    }
+                }
+            }
         }
     }
 }
