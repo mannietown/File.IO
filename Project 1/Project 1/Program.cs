@@ -36,7 +36,7 @@ namespace Project_1
                         DataIO.DeleteRecord(RecordToDelete);
                         goto Start;
                     case ConsoleKey.S:
-
+                        AllData.Sort();
                         break;
                     default:
                         DisplayHelp();
@@ -131,5 +131,7 @@ namespace Project_1
             //Write the new stuff to file
             WriteDataToFile(Data);
         }
+
+       
     }
 }
