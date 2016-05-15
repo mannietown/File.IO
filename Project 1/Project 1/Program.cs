@@ -11,14 +11,43 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine('\a');
-            Console.Read();
+            Console.WriteLine("Loading...");
+            List<string> AllData = DataIO.LoadDataFromFile();
+
+            foreach(string Entry in AllData)
+            {
+                Console.WriteLine(Entry);
+            }
+
+            while(true)
+            {
+                Console.Write("Please enter a task: (? for help) ");
+                ConsoleKeyInfo ck = Console.ReadKey();
+                Console.WriteLine();
+
+                switch(ck.Key)
+                {
+                    case ConsoleKey.A:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        void DisplayHelp()
+        {
+            Console.WriteLine("Options:");
+            Console.WriteLine("A: Add a new record");
+            Console.WriteLine("D: Delete a record if it exists");
+            Console.WriteLine("S: Sort all records");
+            Console.WriteLine("?: Display this menu");
         }
     }
 
     static class DataIO
     {
-        static readonly int Number;
         private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Teaching\\Project 1";
         private static readonly string DatabaseFileLocation = AppDataFolder + "\\Database.dat";
 
