@@ -15,4 +15,34 @@ namespace Project_1
             Console.Read();
         }
     }
+
+    static class DataIO
+    {
+        static readonly int Number;
+        private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Teaching\\Project 1";
+        private static readonly string DatabaseFileLocation = AppDataFolder + "\\Database.dat";
+
+        public static List<string> LoadDataFromFile()
+        {
+            if (!Directory.Exists(AppDataFolder))
+                Directory.CreateDirectory(AppDataFolder);
+
+            if (!File.Exists(DatabaseFileLocation))
+                File.Create(DatabaseFileLocation);
+
+            List<string> ReturnValue = new List<string>();
+            using (StreamReader reader = new StreamReader(DatabaseFileLocation))
+            {
+                string Dataline = reader.ReadLine();
+
+                while (Dataline != null)
+                {
+                    ReturnValue.Add(Dataline);
+                    Dataline = reader.ReadLine();
+                }
+            }
+
+            return ReturnValue;
+        }
+    }
 }
