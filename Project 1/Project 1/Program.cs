@@ -14,29 +14,38 @@ namespace Project_1
             Console.WriteLine("Loading...");
             List<string> AllData = DataIO.LoadDataFromFile();
 
-            foreach(string Entry in AllData)
+            foreach (string Entry in AllData)
             {
                 Console.WriteLine(Entry);
             }
 
-            while(true)
+            while (true)
             {
                 Console.Write("Please enter a task: (? for help) ");
                 ConsoleKeyInfo ck = Console.ReadKey();
                 Console.WriteLine();
 
-                switch(ck.Key)
+                switch (ck.Key)
                 {
                     case ConsoleKey.A:
+                        Console.Write("Record to add: ");
+                        string RecordToAdd = Console.ReadLine();
+                        DataIO.AddRecordToFile(RecordToAdd);
+                        break;
+                    case ConsoleKey.D:
+
+                        break;
+                    case ConsoleKey.S:
 
                         break;
                     default:
+                        DisplayHelp();
                         break;
                 }
             }
         }
 
-        void DisplayHelp()
+        static void DisplayHelp()
         {
             Console.WriteLine("Options:");
             Console.WriteLine("A: Add a new record");
@@ -72,22 +81,39 @@ namespace Project_1
             }
 
             return ReturnValue;
-
         }
-
-
+        
         public static void WriteDataToFile(List<string> DataToWrite)
         {
-            if (Directory.Exists(AppDataFolder))
+            if (!Directory.Exists(AppDataFolder))
+                Directory.CreateDirectory(AppDataFolder);
+
+            using (StreamWriter sw = new StreamWriter(DatabaseFileLocation))
             {
-                using(StreamWriter sw = new StreamWriter(DatabaseFileLocation))
+                foreach (string data in DataToWrite)
                 {
-                    foreach(string data in DataToWrite)
-                    {
-                        sw.WriteLine(data);
-                    }
+                    sw.WriteLine(data);
                 }
             }
+        }
+
+        public static void AddRecordToFile(params string[] RecordsToAdd)
+        {
+            if (!Directory.Exists(AppDataFolder))
+                Directory.CreateDirectory(AppDataFolder);
+
+            using (StreamWriter sw = new StreamWriter(DatabaseFileLocation, true /*Adds to the end of the file*/))
+            {
+                foreach(string Record in RecordsToAdd)
+                {
+                    sw.WriteLine(Record);
+                }
+            }
+        }
+
+        public static void DeleteRecord(params string[] RecordsToRemove)
+        {
+
         }
     }
 }
