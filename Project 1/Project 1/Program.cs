@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Project_1
 {
@@ -30,18 +29,25 @@ namespace Project_1
                         Console.Write("Record to add: ");
                         string RecordToAdd = Console.ReadLine();
                         DataIO.AddRecord(RecordToAdd);
+                        Console.WriteLine("Record added.");
+                        Console.WriteLine();
                         goto Start;
                     case ConsoleKey.D:
                         Console.Write("Record to delete: ");
                         string RecordToDelete = Console.ReadLine();
                         DataIO.DeleteRecord(RecordToDelete);
+                        Console.WriteLine("Record removed.");
+                        Console.WriteLine();
                         goto Start;
                     case ConsoleKey.S:
                         AllData.Sort();
                         DataIO.WriteDataToFile(AllData);
+                        Console.WriteLine("Records sorted");
+                        Console.WriteLine();
                         goto Start;
                     default:
                         DisplayHelp();
+                        Console.WriteLine();
                         break;
                 }
             }
@@ -66,7 +72,7 @@ namespace Project_1
         {
             if (!Directory.Exists(AppDataFolder))
                 Directory.CreateDirectory(AppDataFolder);
-
+            
             if (!File.Exists(DatabaseFileLocation))
                 File.Create(DatabaseFileLocation);
 
