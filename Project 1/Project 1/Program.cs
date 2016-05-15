@@ -11,6 +11,7 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
+            Start:
             Console.WriteLine("Loading...");
             List<string> AllData = DataIO.LoadDataFromFile();
 
@@ -30,11 +31,13 @@ namespace Project_1
                     case ConsoleKey.A:
                         Console.Write("Record to add: ");
                         string RecordToAdd = Console.ReadLine();
-                        DataIO.AddRecordToFile(RecordToAdd);
-                        break;
+                        DataIO.AddRecord(RecordToAdd);
+                        goto Start;
                     case ConsoleKey.D:
-
-                        break;
+                        Console.Write("Record to delete: ");
+                        string RecordToDelete = Console.ReadLine();
+                        DataIO.DeleteRecord(RecordToDelete);
+                        goto Start;
                     case ConsoleKey.S:
                         AllData.Sort();
                         break;
@@ -97,7 +100,7 @@ namespace Project_1
             }
         }
 
-        public static void AddRecordToFile(params string[] RecordsToAdd)
+        public static void AddRecord(params string[] RecordsToAdd)
         {
             if (!Directory.Exists(AppDataFolder))
                 Directory.CreateDirectory(AppDataFolder);
@@ -113,7 +116,23 @@ namespace Project_1
 
         public static void DeleteRecord(params string[] RecordsToRemove)
         {
+            List<string> Data = LoadDataFromFile();
 
+            for (int OldDataIndex = 0; OldDataIndex < Data.Count; OldDataIndex++)
+            {
+                for (int RecordsToRemoveIndex = 0; RecordsToRemoveIndex < RecordsToRemove.Length; RecordsToRemoveIndex++)
+                {
+                    if (Data[OldDataIndex] == RecordsToRemove[RecordsToRemoveIndex])
+                    {
+                        Data.RemoveAt(OldDataIndex); //Remove from the array
+                        OldDataIndex--; //Step back one in OldData because we've removed one
+                        break; //We've matched the existing record, we don't need to iterate through the rest of RecordsToRemove - let's go to the next item in OldData!
+                    }
+                }
+            }
+
+            //Write the new stuff to file
+            WriteDataToFile(Data);
         }
 
        
