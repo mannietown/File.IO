@@ -11,8 +11,10 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine('\a');
-            Console.Read();
+
+            
+            
+            
         }
     }
 }
