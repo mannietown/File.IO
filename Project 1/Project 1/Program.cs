@@ -11,7 +11,7 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("it's up i think.");
+            Console.WriteLine("Wazzle Bizzle");
             Console.ReadLine();
         }
     }
