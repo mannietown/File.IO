@@ -49,13 +49,13 @@ namespace Project_1
         }
 
 
-        public static void WriteDataToFile(List<string> list)
+        public static void WriteDataToFile(List<string>DataToWrite)
         {
             if (Directory.Exists(AppDataFolder))
             {
                 using(StreamWriter sw = new StreamWriter(DatabaseFileLocation))
                 {
-                    foreach(string data in LoadDataFromFile())
+                    foreach(string data in DataToWrite)
                     {
                         sw.WriteLine(data);
                     }
