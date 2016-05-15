@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Project_1
 {
@@ -37,7 +38,8 @@ namespace Project_1
                         goto Start;
                     case ConsoleKey.S:
                         AllData.Sort();
-                        break;
+                        DataIO.WriteDataToFile(AllData);
+                        goto Start;
                     default:
                         DisplayHelp();
                         break;
@@ -131,7 +133,5 @@ namespace Project_1
             //Write the new stuff to file
             WriteDataToFile(Data);
         }
-
-       
     }
 }
