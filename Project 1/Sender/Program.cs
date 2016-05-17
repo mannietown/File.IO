@@ -7,13 +7,16 @@ namespace Sender
 {
     class Sender
     {
+        //All characters stored in an array rather than a file. Note that it doesn't contain numbers. Just didn't bother adding them - you're welcome to
         readonly char[] AlphaNumericChars = new char[] { '!', '\"', '£', '$', '%', '^', '&', '*', '(', ')', '\'', '-', '_', '=',
             '`', '¬', '|', '\\', ',', '<', '.', '>', '/', '?', ';', ':', '@', '~', '#', ']', '[', '}', '{', 'A', 'B', 'C', 'D',
             'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
             'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
         public SortedList AlphaKeyValue = new SortedList();
-        Random rand = new Random();
+
+        //Consider changing the Random to a parameter for the GetKey method, and create the Random object when using DataToSortedList method as it is the only place it is used. 
+        Random rand = new Random(); 
 
         //Ensures that there are no 2 keys with the same values
         public int GetKey(int CountLeft)
@@ -73,6 +76,8 @@ namespace Sender
 
         public void PrintEncrypted(string FileLocation, string Message)
         {
+            //Consider adding an If Directory.Exists(folder) thing
+
             using (StreamWriter writer = new StreamWriter(FileLocation))
             {
                 writer.Write(Message);
@@ -81,13 +86,15 @@ namespace Sender
 
         public void PrintKeyCode(string FileLocation)
         {
+            //Consider adding an If Directory.Exists(folder) thing
+
             using (FileStream fs = new FileStream(FileLocation, FileMode.Create, FileAccess.Write))
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    bf.Serialize(ms, AlphaKeyValue);
+                    bf.Serialize(ms, AlphaKeyValue); //Turns list into raw data
 
                     byte[] BytesToWrite = ms.ToArray();
                     fs.Write(BytesToWrite, 0, BytesToWrite.Length);
@@ -107,7 +114,7 @@ namespace Sender
             using (FileStream fs = new FileStream(KeyCodeLocation, FileMode.Open, FileAccess.Read))
             {
                 BinaryFormatter bf = new BinaryFormatter();
-                AlphaKeyValue = (SortedList)bf.Deserialize(fs);
+                AlphaKeyValue = (SortedList)bf.Deserialize(fs); //Turns raw data into list
             }
 
             //Load encrypted message
