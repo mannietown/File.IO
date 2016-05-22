@@ -15,6 +15,26 @@ namespace Stock_Manager
         public frmHome()
         {
             InitializeComponent();
+
+        }
+    }
+
+    class DataClass
+    {
+        string objectdescription;
+        public string ObjectDescription { get { return objectdescription; } set { } }
+    }
+
+    static class DataIO
+    {
+        public static void Load()
+        {
+
+        }
+
+        public static void Save()
+        {
+
         }
     }
 }
