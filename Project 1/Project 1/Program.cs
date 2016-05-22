@@ -40,6 +40,15 @@ namespace Project_1
                         AllData.Sort();
                         DataIO.WriteDataToFile(AllData);
                         goto Start;
+
+                    case ConsoleKey.L:
+                        List<string> DataLoadedFromFile = DataIO.LoadDataFromFile().ToList();
+                        foreach(string element in DataLoadedFromFile)
+                        {
+                            Console.WriteLine(element);
+                            
+                        }
+                        break;
                     default:
                         DisplayHelp();
                         break;
@@ -53,6 +62,7 @@ namespace Project_1
             Console.WriteLine("A: Add a new record");
             Console.WriteLine("D: Delete a record if it exists");
             Console.WriteLine("S: Sort all records");
+            Console.WriteLine("L: Loads data from file.");
             Console.WriteLine("?: Display this menu");
         }
     }
@@ -62,6 +72,8 @@ namespace Project_1
         private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Teaching\\Project 1";
         private static readonly string DatabaseFileLocation = AppDataFolder + "\\Database.dat";
 
+
+       
         public static List<string> LoadDataFromFile()
         {
             if (!Directory.Exists(AppDataFolder))
