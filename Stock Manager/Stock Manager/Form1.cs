@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 namespace Stock_Manager
@@ -14,11 +16,20 @@ namespace Stock_Manager
 
     class Stock
     {
-        List<ScheduledStockChange> ScheduledStockChanges = new List<ScheduledStockChange>();
+        public List<ScheduledStockChange> ScheduledStockChanges;
+        public List<StockItem> AllStock;
+        private string FileLocation;
 
         public Stock(string FileLocation, bool CreateNew)
         {
-
+            this.FileLocation = FileLocation;
+            if (CreateNew)
+            {
+                ScheduledStockChanges = new List<ScheduledStockChange>();
+                AllStock = new List<StockItem>();
+            }
+             else
+                Load(FileLocation);
         }
 
         public void PerformScheduledStockChanges()
@@ -28,7 +39,17 @@ namespace Stock_Manager
                 if (ScheduledStockChanges[Index].ItemHasArrived)
                 {
                     //Perform stock change
-                    NumberInStock += ScheduledStockChanges[Index].NumberToAddRemove;
+                    foreach (StockItem si in AllStock)
+                    {
+                        for (int Index2 = 0; Index2 < Index; Index2++)
+                        {
+                            if (si.ItemID == ScheduledStockChanges[Index].ItemsBeingChanged[Index2])
+                                si.NumberInStock += ScheduledStockChanges[Index].NumberToAddRemove;
+                        }
+                    }
+
+                    ScheduledStockChanges.RemoveAt(Index);
+                    Index--;
                 }
             }
         }
@@ -47,6 +68,43 @@ namespace Stock_Manager
             }
 
             return ReturnValue;
+        }
+
+        public void Save()
+        {
+            Backup(FileLocation);
+        }
+
+        public void Backup(string FileLocation)
+        {
+            string Folder = FileLocation.Substring(0, FileLocation.LastIndexOf('\\'));
+
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
+
+            using (FileStream fs = new FileStream(FileLocation, FileMode.Create, FileAccess.ReadWrite))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
+
+                bf.Serialize(fs, AllStock);
+                bf.Serialize(fs, ScheduledStockChanges);
+            }
+        }
+        
+        public void Load()
+        {
+            Load(FileLocation);
+        }
+
+        public void Load(string FileLocation)
+        {
+            using (FileStream fs = new FileStream(FileLocation, FileMode.Open, FileAccess.Read))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                AllStock = (List<StockItem>)bf.Deserialize(fs);
+                ScheduledStockChanges = (List<ScheduledStockChange>)bf.Deserialize(fs);
+            }
         }
     }
 
@@ -78,9 +136,6 @@ namespace Stock_Manager
 
         List<StringAndInt> StocksToChange = new List<StringAndInt>();
 
-        public long NumberToAddRemove { get { return numbertoaddremove; } set { numbertoaddremove = value; } }
-        private long numbertoaddremove;
-
         public bool ItemHasArrived { get { return ItemSentOrReceived; } }
         private bool ItemSentOrReceived = false;
 
@@ -89,10 +144,11 @@ namespace Stock_Manager
         /// </summary>
         /// <param name="TransactionDateTime">When the order will arrive/ be sent out</param>
         /// <param name="NumberToAddOrRemove">The number of items that will be added to stock (positive number) or the number of items to remove (negative number)</param>
-        public ScheduledStockChange(DateTime TransactionDateTime, long NumberToAddRemove)
+        public ScheduledStockChange(DateTime TransactionDateTime, long NumberToAddRemove, List<string> StocksToChange)
         {
             OrderETA = TransactionDateTime;
-            this.NumberToAddRemove = NumberToAddRemove;
+
+
         }
 
         public void ItemArrived()
@@ -100,28 +156,31 @@ namespace Stock_Manager
             ItemSentOrReceived = true;
         }
 
-        public List<string> ItemsBeingChanged {
+        public List<string> ItemsBeingChanged
+        {
             get
             {
                 List<string> ReturnValue = new List<string>();
-                foreach(StringAndInt si in StocksToChange)
+                foreach (StringAndInt si in StocksToChange)
                 {
                     if (!ReturnValue.Contains(si.s))
                         ReturnValue.Add(si.s);
                 }
 
                 return ReturnValue;
-            } }
+            }
+        }
 
         public long TotalExportCount
         {
             get
             {
                 long ReturnValue = 0;
-                foreach(StringAndInt si in StocksToChange)
+                foreach (StringAndInt si in StocksToChange)
                 {
-                    
+                    ReturnValue += si.i;
                 }
+                return ReturnValue;
             }
         }
     }

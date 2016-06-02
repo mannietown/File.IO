@@ -8,6 +8,8 @@ namespace Stock_Manager
 {
     static class Program
     {
+        public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StockManager";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
