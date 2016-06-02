@@ -12,6 +12,7 @@ namespace Stock_Manager
         public frmHome()
         {
             InitializeComponent();
+
             try
             {
                 MainDatabase = DataIO.Load();
@@ -31,6 +32,15 @@ namespace Stock_Manager
         }
     }
 
+    public class MyDataEntry
+    {
+        public string Data = "";
+        public MyDataEntry(string Entry)
+        {
+            Data = Entry;
+        }
+    }
+    
     public class DataEntry
     {
         string objectdescription;
