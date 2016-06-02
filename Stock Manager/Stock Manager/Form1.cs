@@ -28,11 +28,14 @@ namespace Stock_Manager
                 ScheduledStockChanges = new List<ScheduledStockChange>();
                 AllStock = new List<StockItem>();
             }
-             else
+            else
                 Load(FileLocation);
         }
 
-        public void PerformScheduledStockChanges()
+        /// <summary>
+        /// Checks which orders have arrived, and adjusts the stock counts accordingly
+        /// </summary>
+        public void RefreshStockCounts()
         {
             for (int Index = 0; Index < ScheduledStockChanges.Count; Index++)
             {
@@ -44,7 +47,7 @@ namespace Stock_Manager
                         for (int Index2 = 0; Index2 < Index; Index2++)
                         {
                             if (si.ItemID == ScheduledStockChanges[Index].ItemsBeingChanged[Index2])
-                                si.NumberInStock += ScheduledStockChanges[Index].NumberToAddRemove;
+                                si.NumberInStock += ScheduledStockChanges[Index].StocksToChange[Index2].i;
                         }
                     }
 
@@ -91,7 +94,7 @@ namespace Stock_Manager
                 bf.Serialize(fs, ScheduledStockChanges);
             }
         }
-        
+
         public void Load()
         {
             Load(FileLocation);
@@ -105,6 +108,56 @@ namespace Stock_Manager
                 AllStock = (List<StockItem>)bf.Deserialize(fs);
                 ScheduledStockChanges = (List<ScheduledStockChange>)bf.Deserialize(fs);
             }
+        }
+
+        public double TotalStockValue
+        {
+            get
+            {
+                double ReturnValue = 0;
+
+                foreach (StockItem si in AllStock)
+                    ReturnValue += si.ItemValue * si.NumberInStock;
+
+                return ReturnValue;
+            }
+        }
+
+        /// <summary>
+        /// Gets the predicted value based on ScheduledStockChanges that the stock will have at a set date/time
+        /// </summary>
+        /// <param name="ValueAt">The date/time to predict the value for</param>
+        /// <returns></returns>
+        public double PredictedValue(DateTime ValueAt)
+        {
+            double CurrentStockValue = TotalStockValue;
+
+            //Simulate performing ScheduledStockChanges
+            foreach (ScheduledStockChange ssc in ScheduledStockChanges)
+            {
+                if (ssc.OrderETA <= ValueAt)
+                {
+                    foreach (StringAndInt si in ssc.StocksToChange)
+                    {
+                        bool FoundMatch = false;
+                        foreach (StockItem Item in AllStock)
+                        {
+                            if (Item.ItemID == si.s)
+                            {
+                                CurrentStockValue += (Item.ItemValue * si.i);
+
+                                FoundMatch = true;
+                                break;
+                            }
+                        }
+
+                        if (!FoundMatch)
+                            throw new KeyNotFoundException("ItemID " + si.ToString() + " not found.");
+                    }
+                }
+            }
+
+            return CurrentStockValue;
         }
     }
 
@@ -134,26 +187,36 @@ namespace Stock_Manager
         public DateTime OrderETA { get { return ordereta; } set { ordereta = value; } }
         private DateTime ordereta;
 
-        List<StringAndInt> StocksToChange = new List<StringAndInt>();
+        List<StringAndInt> stockstochange = new List<StringAndInt>();
+        public List<StringAndInt> StocksToChange { get { return stockstochange; } }
 
         public bool ItemHasArrived { get { return ItemSentOrReceived; } }
         private bool ItemSentOrReceived = false;
 
-        /// <summary>
-        /// Create a scheduled stock change (an order for a specific date/time)
-        /// </summary>
-        /// <param name="TransactionDateTime">When the order will arrive/ be sent out</param>
-        /// <param name="NumberToAddOrRemove">The number of items that will be added to stock (positive number) or the number of items to remove (negative number)</param>
-        public ScheduledStockChange(DateTime TransactionDateTime, long NumberToAddRemove, List<string> StocksToChange)
+        public int this[string ItemID]
         {
-            OrderETA = TransactionDateTime;
+            get
+            {
+                foreach (StringAndInt si in StocksToChange)
+                {
+                    if (ItemID == si.s)
+                        return si.i;
+                }
 
-
-        }
-
-        public void ItemArrived()
-        {
-            ItemSentOrReceived = true;
+                throw new KeyNotFoundException("ItemID " + ItemID + " not found");
+            }
+            set
+            {
+                foreach (StringAndInt si in StocksToChange)
+                {
+                    if (ItemID == si.s)
+                    {
+                        si.i = value;
+                        return;
+                    }
+                }
+                throw new KeyNotFoundException("ItemID " + ItemID + " not found");
+            }
         }
 
         public List<string> ItemsBeingChanged
@@ -178,10 +241,32 @@ namespace Stock_Manager
                 long ReturnValue = 0;
                 foreach (StringAndInt si in StocksToChange)
                 {
-                    ReturnValue += si.i;
+                    int ValueToAdd = si.i;
+                    if (ValueToAdd < 0)
+                        ValueToAdd = 0 - ValueToAdd;
+
+                    ReturnValue += ValueToAdd;
                 }
                 return ReturnValue;
             }
+        }
+
+        /// <summary>
+        /// Create a scheduled stock change (an order for a specific date/time)
+        /// </summary>
+        /// <param name="TransactionDateTime">When the order will arrive/ be sent out</param>
+        /// <param name="StocksToChange">The items that will be added to stock or removed</param>
+        /// <param name="AddToStocks">Whether the item is being added to or removed from the stock (delivery to us or a customer)</param>
+        public ScheduledStockChange(DateTime TransactionDateTime, List<StringAndInt> StocksToChange, bool AddToStocks)
+        {
+            OrderETA = TransactionDateTime;
+
+            stockstochange = StocksToChange;
+        }
+
+        public void ItemArrived()
+        {
+            ItemSentOrReceived = true;
         }
     }
 
