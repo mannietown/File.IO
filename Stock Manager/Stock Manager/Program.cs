@@ -9,6 +9,7 @@ namespace Stock_Manager
     static class Program
     {
         public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StockManager";
+        public static User ActiveUser = new User("SysAdmin", "Sytem", "SysAdmin", null, ;
 
         /// <summary>
         /// The main entry point for the application.
@@ -18,7 +19,11 @@ namespace Stock_Manager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            frmLogin form = new frmLogin();
+
+            if (form.ShowDialog() == DialogResult.OK)
+                Application.Run(new frmHome());
         }
     }
 }

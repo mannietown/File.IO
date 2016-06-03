@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Stock_Manager
 {
-    public partial class Form1 : Form
+    public partial class frmHome : Form
     {
-        public Form1()
+        public frmHome()
         {
             InitializeComponent();
         }
@@ -39,7 +39,7 @@ namespace Stock_Manager
         {
             for (int Index = 0; Index < ScheduledStockChanges.Count; Index++)
             {
-                if (ScheduledStockChanges[Index].ItemHasArrived)
+                if (ScheduledStockChanges[Index].ItemSentOrReceived)
                 {
                     //Perform stock change
                     foreach (StockItem si in AllStock)
@@ -190,8 +190,8 @@ namespace Stock_Manager
         List<StringAndInt> stockstochange = new List<StringAndInt>();
         public List<StringAndInt> StocksToChange { get { return stockstochange; } }
 
-        public bool ItemHasArrived { get { return ItemSentOrReceived; } }
-        private bool ItemSentOrReceived = false;
+        public bool ItemSentOrReceived { get { return itemsentorrecieved; } }
+        private bool itemsentorrecieved = false;
 
         public int this[string ItemID]
         {
@@ -251,6 +251,13 @@ namespace Stock_Manager
             }
         }
 
+        public ScheduledStockChange(List<StringAndInt> StocksToChange, bool AddToStocks)
+        {
+            OrderETA = DateTime.Now;
+            itemsentorrecieved = true;
+            stockstochange = StocksToChange;
+        }
+
         /// <summary>
         /// Create a scheduled stock change (an order for a specific date/time)
         /// </summary>
@@ -266,7 +273,7 @@ namespace Stock_Manager
 
         public void ItemArrived()
         {
-            ItemSentOrReceived = true;
+            itemsentorrecieved = true;
         }
     }
 
