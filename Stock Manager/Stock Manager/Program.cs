@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//TODO Convert to server based operation
 namespace Stock_Manager
 {
     static class Program
     {
         public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StockManager";
-        public static User ActiveUser = new User("SysAdmin", "Sytem", "SysAdmin", null, ;
+        public static readonly string SharedAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Stock Manager";
+        public static bool CloseAll = false;
 
         /// <summary>
         /// The main entry point for the application.
@@ -17,13 +19,24 @@ namespace Stock_Manager
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            frmLogin form = new frmLogin();
+                frmLogin form = new frmLogin();
 
-            if (form.ShowDialog() == DialogResult.OK)
-                Application.Run(new frmHome());
+                if (form.ShowDialog() == DialogResult.OK)
+                    Application.Run(new frmHome());
+            }
+            catch (Exception ex)
+            {
+                Error_Log.LogError(ex, Error_Log.ShowError.ShowFull);
+            }
+            finally
+            {
+                CloseAll = true;
+            }
         }
     }
 }
