@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Stock_Manager
 {
-    public partial class frmHome : Form
+    public partial class frmCheckout : Form
     {
-        public frmHome()
+        public frmCheckout(Stock StocksToManage)
         {
             InitializeComponent();
         }

@@ -27,7 +27,7 @@ namespace Stock_Manager
                 frmLogin form = new frmLogin();
 
                 if (form.ShowDialog() == DialogResult.OK)
-                    Application.Run(new frmHome());
+                    Application.Run(new frmCheckout(form.SelectedStock));
             }
             catch (Exception ex)
             {

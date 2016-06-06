@@ -151,11 +151,11 @@ namespace Stock_Manager
                             stream.WriteLine("New activity occured at: " + DateTime.Now);
                             try
                             {
-                                stream.WriteLine("Windows User: " + Environment.UserDomainName + "\\" + Environment.UserName);
+                                stream.WriteLine("Windows User ID: " + Environment.UserDomainName + "\\" + Environment.UserName);
                             }
                             catch (Exception ex) when (ex is PlatformNotSupportedException || ex is InvalidOperationException)
                             {
-                                stream.WriteLine("Windows User:" + Environment.UserName);
+                                stream.WriteLine("Windows User ID: " + Environment.UserName);
                             }
 
                             stream.WriteLine("User ID: " + User.CurrentUser.LoginID + " (" + User.CurrentUser.Firstname + " " + User.CurrentUser.Surname);
@@ -217,10 +217,9 @@ namespace Stock_Manager
         }
 
         /// <summary>
-        /// Logs the error, then optionally shows the error to the user
+        /// Logs the activity
         /// </summary>
-        /// <param name="ex">The error to log</param>
-        /// <param name="ShowToUser">Whether to show the error to the user</param>
+        /// <param name="Action">The activity to log</param>
         public static void LogActivity(string Action)
         {
             ActivityQueue.Enqueue(Action);

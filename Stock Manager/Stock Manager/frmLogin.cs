@@ -11,6 +11,8 @@ namespace Stock_Manager
 {
     public partial class frmLogin : Form
     {
+        public Stock SelectedStock { get { return new Stock(cmbSiteSelection.SelectedValue.ToString(), false); } }
+
         public frmLogin()
         {
             InitializeComponent();
@@ -28,8 +30,16 @@ namespace Stock_Manager
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
-            Close();
+            //TODO Get available sites for user
+
+            if (User.Login(txtUsername.Text, txtPassword.Text))
+            {
+                ActivityLog.LogActivity("User logged in");
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else MessageBox.Show("Incorrect username or password. Please check your credentials and try again",
+                "Invalid Credentials", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
     }
 }

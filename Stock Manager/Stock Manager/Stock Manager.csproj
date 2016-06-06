@@ -61,6 +61,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmNewStockEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewStockEntry.Designer.cs">
+      <DependentUpon>frmNewStockEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStandingOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStandingOrders.Designer.cs">
+      <DependentUpon>frmStandingOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logs.cs" />
     <Compile Include="frmAdminPanel.cs">
       <SubType>Form</SubType>
@@ -74,11 +86,11 @@
     <Compile Include="frmCreateUser.Designer.cs">
       <DependentUpon>frmCreateUser.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmHome.cs">
+    <Compile Include="frmCheckout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmHome.Designer.cs">
-      <DependentUpon>frmHome.cs</DependentUpon>
+    <Compile Include="frmCheckout.Designer.cs">
+      <DependentUpon>frmCheckout.cs</DependentUpon>
     </Compile>
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
@@ -102,11 +114,17 @@
     <EmbeddedResource Include="frmCreateUser.resx">
       <DependentUpon>frmCreateUser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmHome.resx">
-      <DependentUpon>frmHome.cs</DependentUpon>
+    <EmbeddedResource Include="frmCheckout.resx">
+      <DependentUpon>frmCheckout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewStockEntry.resx">
+      <DependentUpon>frmNewStockEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStandingOrders.resx">
+      <DependentUpon>frmStandingOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmViewStocks.resx">
       <DependentUpon>frmViewStocks.cs</DependentUpon>
@@ -120,6 +138,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Properties\DataSources\StockItem.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

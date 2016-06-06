@@ -29,75 +29,128 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnAddNewItem = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
+            this.btnOrderStock = new System.Windows.Forms.Button();
+            this.dgvStocks = new System.Windows.Forms.DataGridView();
+            this.btnViewScheduledOrders = new System.Windows.Forms.Button();
             this.stockItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.itemIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numberInStockDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStocks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stockItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // btnExit
             // 
-            this.label1.Location = new System.Drawing.Point(25, 46);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 30);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Show stocks, set specific item\'s stocks (depending on permissions)";
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnExit.Location = new System.Drawing.Point(12, 362);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(110, 33);
+            this.btnExit.TabIndex = 3;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
             // 
-            // btnAddNewItem
+            // btnOrderStock
             // 
-            this.btnAddNewItem.Location = new System.Drawing.Point(581, 362);
-            this.btnAddNewItem.Name = "btnAddNewItem";
-            this.btnAddNewItem.Size = new System.Drawing.Size(110, 33);
-            this.btnAddNewItem.TabIndex = 2;
-            this.btnAddNewItem.Text = "New Stocks Entry";
-            this.btnAddNewItem.UseVisualStyleBackColor = true;
+            this.btnOrderStock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOrderStock.Location = new System.Drawing.Point(581, 362);
+            this.btnOrderStock.Name = "btnOrderStock";
+            this.btnOrderStock.Size = new System.Drawing.Size(110, 33);
+            this.btnOrderStock.TabIndex = 4;
+            this.btnOrderStock.Text = "Order New Stock";
+            this.btnOrderStock.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // dgvStocks
             // 
-            this.button1.Location = new System.Drawing.Point(12, 362);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 33);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Exit";
-            this.button1.UseVisualStyleBackColor = true;
+            this.dgvStocks.AllowUserToAddRows = false;
+            this.dgvStocks.AllowUserToDeleteRows = false;
+            this.dgvStocks.AllowUserToOrderColumns = true;
+            this.dgvStocks.AutoGenerateColumns = false;
+            this.dgvStocks.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.dgvStocks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvStocks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.itemIDDataGridViewTextBoxColumn,
+            this.ItemDescription,
+            this.numberInStockDataGridViewTextBoxColumn,
+            this.itemValueDataGridViewTextBoxColumn});
+            this.dgvStocks.DataSource = this.stockItemBindingSource;
+            this.dgvStocks.Location = new System.Drawing.Point(12, 12);
+            this.dgvStocks.Name = "dgvStocks";
+            this.dgvStocks.Size = new System.Drawing.Size(679, 344);
+            this.dgvStocks.TabIndex = 5;
+            this.dgvStocks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStocks_CellEndEdit);
+            this.dgvStocks.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvStocks_UserAddedRow);
+            this.dgvStocks.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvStocks_UserDeletedRow);
+            this.dgvStocks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgvStocks_UserDeletingRow);
             // 
-            // button2
+            // btnViewScheduledOrders
             // 
-            this.button2.Location = new System.Drawing.Point(291, 362);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(110, 33);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Order New Stock";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnViewScheduledOrders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewScheduledOrders.Location = new System.Drawing.Point(286, 362);
+            this.btnViewScheduledOrders.Name = "btnViewScheduledOrders";
+            this.btnViewScheduledOrders.Size = new System.Drawing.Size(128, 33);
+            this.btnViewScheduledOrders.TabIndex = 6;
+            this.btnViewScheduledOrders.Text = "View Standing Orders";
+            this.btnViewScheduledOrders.UseVisualStyleBackColor = true;
             // 
             // stockItemBindingSource
             // 
             this.stockItemBindingSource.DataSource = typeof(Stock_Manager.StockItem);
+            // 
+            // itemIDDataGridViewTextBoxColumn
+            // 
+            this.itemIDDataGridViewTextBoxColumn.DataPropertyName = "ItemID";
+            this.itemIDDataGridViewTextBoxColumn.HeaderText = "Unique ID";
+            this.itemIDDataGridViewTextBoxColumn.Name = "itemIDDataGridViewTextBoxColumn";
+            // 
+            // ItemDescription
+            // 
+            this.ItemDescription.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ItemDescription.DataPropertyName = "ItemDescription";
+            this.ItemDescription.HeaderText = "Description";
+            this.ItemDescription.Name = "ItemDescription";
+            // 
+            // numberInStockDataGridViewTextBoxColumn
+            // 
+            this.numberInStockDataGridViewTextBoxColumn.DataPropertyName = "NumberInStock";
+            this.numberInStockDataGridViewTextBoxColumn.HeaderText = "Stock Count";
+            this.numberInStockDataGridViewTextBoxColumn.Name = "numberInStockDataGridViewTextBoxColumn";
+            // 
+            // itemValueDataGridViewTextBoxColumn
+            // 
+            this.itemValueDataGridViewTextBoxColumn.DataPropertyName = "ItemValue";
+            this.itemValueDataGridViewTextBoxColumn.HeaderText = "Cost Per Item";
+            this.itemValueDataGridViewTextBoxColumn.Name = "itemValueDataGridViewTextBoxColumn";
             // 
             // frmViewStocks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(703, 407);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.btnAddNewItem);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnViewScheduledOrders);
+            this.Controls.Add(this.dgvStocks);
+            this.Controls.Add(this.btnOrderStock);
+            this.Controls.Add(this.btnExit);
             this.Name = "frmViewStocks";
-            this.Text = "frmViewStocks";
+            this.Text = "Current Stock";
+            this.Load += new System.EventHandler(this.frmViewStocks_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStocks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stockItemBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnAddNewItem;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button btnOrderStock;
         private System.Windows.Forms.BindingSource stockItemBindingSource;
+        private System.Windows.Forms.DataGridView dgvStocks;
+        private System.Windows.Forms.Button btnViewScheduledOrders;
+        private System.Windows.Forms.DataGridViewTextBoxColumn itemIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn numberInStockDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn itemValueDataGridViewTextBoxColumn;
     }
 }
