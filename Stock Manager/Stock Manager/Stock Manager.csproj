@@ -61,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmChooseSite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChooseSite.Designer.cs">
+      <DependentUpon>frmChooseSite.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmNewStockEntry.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     <Compile Include="Users.cs" />
     <EmbeddedResource Include="frmAdminPanel.resx">
       <DependentUpon>frmAdminPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChooseSite.resx">
+      <DependentUpon>frmChooseSite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCreateUser.resx">
       <DependentUpon>frmCreateUser.cs</DependentUpon>

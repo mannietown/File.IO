@@ -337,26 +337,39 @@ namespace Stock_Manager
             ordereditems = new List<StringAndInt>();
         }
 
-        public void AddItemToCart(string ItemID, int ItemCount)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="BarcodeScanned"></param>
+        /// <param name="ItemCount"></param>
+        /// <returns></returns>
+        public double AddItemToCart(string BarcodeScanned, int ItemCount)
         {
-            StockItem si;
+            StockItem si = null;
 
-            foreach(StockItem siEnumerator in Stock.ActiveStock.AllStock)
+            foreach (StockItem siEnumerator in Stock.ActiveStock.AllStock)
             {
-
+                if (siEnumerator.BarcodeValue == BarcodeScanned)
+                {
+                    si = siEnumerator;
+                }
             }
 
-            if (StockItem.NumberInStock/*Get item from ItemID (barcode number)*/ < ItemCount)
+            if (si == null)
+                throw new ArgumentNullException("ItemID");
+
+            if (si.NumberInStock < ItemCount)
             {
-                if (MessageBox.Show("There seems to be not enough of " + si.ItemID + " in stock to carry out the order. Proceed anyway?",
+                if (MessageBox.Show("There seems to be not enough of " + si.BarcodeValue + " in stock to carry out the order. Proceed anyway?",
                     "Item Not In Stock", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 { //TODO Come up with a better solution for dealing with this
-                    throw new IndexOutOfRangeException("Not enough of " + si.ItemID + " in stock to carry out the order");
+                    throw new IndexOutOfRangeException("Not enough of " + si.BarcodeValue + " in stock to carry out the order");
                 }
                 //else proceed
             }
 
-            ordereditems.Add(new StringAndInt(ItemID, ItemCount));
+            ordereditems.Add(new StringAndInt(BarcodeScanned, ItemCount));
+            return si.ItemValue;
         }
     }
 

@@ -9,7 +9,7 @@ namespace Stock_Manager
 {
     static class Program
     {
-        public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StockManager";
+        public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Stock Manager";
         public static readonly string SharedAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Stock Manager";
         public static bool CloseAll = false;
 
@@ -27,7 +27,14 @@ namespace Stock_Manager
                 frmLogin form = new frmLogin();
 
                 if (form.ShowDialog() == DialogResult.OK)
-                    Application.Run(new frmCheckout(form.SelectedStock));
+                {
+                    //TODO Open a menu for selecting which form to open if the user has more access than just the checkout. 
+
+                    Application.Run(new frmCheckout(form.SelectedStock)); //Run the program
+
+                    ActivityLog.LogActivity("User " + User.CurrentUser + " logged off");
+                }
+
             }
             catch (Exception ex)
             {

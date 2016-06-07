@@ -16,11 +16,12 @@ namespace Stock_Manager
         public static User CurrentUser;
 
         List<AreaOfAccess> permissions; //TODO Encrypt permissions when saving
-        public List<AreaOfAccess> Permissions { get { return permissions; } }
-        
-        public SiteAccess[] SitesTheyCanAccess;
 
         //TODO Create default permissions
+        public List<AreaOfAccess> Permissions { get { return permissions; } }
+        
+        public SiteAccess[] SitesTheyCanAccess { get; set; }
+
         public class SiteAccess
         {
             public string SiteID { get; set; }
@@ -30,6 +31,11 @@ namespace Stock_Manager
             {
                 this.SiteID = SiteID;
                 this.pl = pl;
+            }
+
+            public override string ToString()
+            {
+                return SiteID + " (" + AreaOfAccess.PermissionLevelToString(pl) + ")";
             }
         }
 

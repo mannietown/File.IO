@@ -8,22 +8,257 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Stock_Manager.Properties
-{
-
-
+namespace Stock_Manager.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmAdminPanelSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmAdminPanelSize"]));
+            }
+            set {
+                this["frmAdminPanelSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmAdminPanelLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmAdminPanelLocation"]));
+            }
+            set {
+                this["frmAdminPanelLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmAdminPanelWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmAdminPanelWindowState"]));
+            }
+            set {
+                this["frmAdminPanelWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmCheckoutSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmCheckoutSize"]));
+            }
+            set {
+                this["frmCheckoutSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmCheckoutLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmCheckoutLocation"]));
+            }
+            set {
+                this["frmCheckoutLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmChooseSiteSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmChooseSiteSize"]));
+            }
+            set {
+                this["frmChooseSiteSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmChooseSiteLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmChooseSiteLocation"]));
+            }
+            set {
+                this["frmChooseSiteLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmChooseSiteWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmChooseSiteWindowState"]));
+            }
+            set {
+                this["frmChooseSiteWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmCreateUserSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmCreateUserSize"]));
+            }
+            set {
+                this["frmCreateUserSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmCreateUserLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmCreateUserLocation"]));
+            }
+            set {
+                this["frmCreateUserLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmCreateUserWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmCreateUserWindowState"]));
+            }
+            set {
+                this["frmCreateUserWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmStandingOrdersSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmStandingOrdersSize"]));
+            }
+            set {
+                this["frmStandingOrdersSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point frmStandingOrdersLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmStandingOrdersLocation"]));
+            }
+            set {
+                this["frmStandingOrdersLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmStandingOrdersWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmStandingOrdersWindowState"]));
+            }
+            set {
+                this["frmStandingOrdersWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size frmViewStocksSize {
+            get {
+                return ((global::System.Drawing.Size)(this["frmViewStocksSize"]));
+            }
+            set {
+                this["frmViewStocksSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point frmViewStocksLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["frmViewStocksLocation"]));
+            }
+            set {
+                this["frmViewStocksLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmViewStocksWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmViewStocksWindowState"]));
+            }
+            set {
+                this["frmViewStocksWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmCheckoutWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmCheckoutWindowState"]));
+            }
+            set {
+                this["frmCheckoutWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Username {
+            get {
+                return ((string)(this["Username"]));
+            }
+            set {
+                this["Username"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Site {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Site"]));
+            }
+            set {
+                this["Site"] = value;
             }
         }
     }

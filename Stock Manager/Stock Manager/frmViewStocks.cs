@@ -22,23 +22,24 @@ namespace Stock_Manager
         private void frmViewStocks_Load(object sender, EventArgs e)
         {
             dgvStocks.DataSource = (User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, User.AreaOfAccess.PermissionLevel.ReadOnly)) ? stockItemBindingSource : null;
+                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly)) ? stockItemBindingSource : null;
 
             dgvStocks.ReadOnly = !User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
+                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
 
             dgvStocks.AllowUserToDeleteRows = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, User.AreaOfAccess.PermissionLevel.FullAccess);
+                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.FullAccess);
 
             dgvStocks.AllowUserToAddRows = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, User.AreaOfAccess.PermissionLevel.FullAccess);
+                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.FullAccess);
 
             btnOrderStock.Enabled = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.IncomingOrders, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
+                User.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
 
             btnViewScheduledOrders.Enabled = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.IncomingOrders, User.AreaOfAccess.PermissionLevel.ReadOnly) ||
-                User.CurrentUser.HasAccess(User.AreaOfAccess.AccessArea.OutgoingOrders, User.AreaOfAccess.PermissionLevel.ReadOnly);
+                User.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly) ||
+                User.CurrentUser.HasAccess(
+                    User.AreaOfAccess.AccessArea.OutgoingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly);
 
             ActivityLog.LogActivity("User checked stocks");
             stockItemBindingSource.DataSource = ActiveStock;
