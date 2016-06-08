@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UserManagement;
 
 namespace Stock_Manager
 {
@@ -22,24 +23,24 @@ namespace Stock_Manager
         private void frmViewStocks_Load(object sender, EventArgs e)
         {
             dgvStocks.DataSource = (User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly)) ? stockItemBindingSource : null;
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, Permissions.PermissionLevel.ReadOnly)) ? stockItemBindingSource : null;
 
             dgvStocks.ReadOnly = !User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, Permissions.PermissionLevel.ReadAndEdit);
 
             dgvStocks.AllowUserToDeleteRows = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.FullAccess);
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, Permissions.PermissionLevel.FullAccess);
 
             dgvStocks.AllowUserToAddRows = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, User.AreaOfAccess.PermissionLevel.FullAccess);
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, ActiveStock, Permissions.PermissionLevel.FullAccess);
 
             btnOrderStock.Enabled = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadAndEdit);
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, Permissions.PermissionLevel.ReadAndEdit);
 
             btnViewScheduledOrders.Enabled = User.CurrentUser.HasAccess(
-                User.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly) ||
+                Permissions.SiteAccess.AreaOfAccess.AccessArea.IncomingOrders, ActiveStock, Permissions.PermissionLevel.ReadOnly) ||
                 User.CurrentUser.HasAccess(
-                    User.AreaOfAccess.AccessArea.OutgoingOrders, ActiveStock, User.AreaOfAccess.PermissionLevel.ReadOnly);
+                    Permissions.SiteAccess.AreaOfAccess.AccessArea.OutgoingOrders, ActiveStock, Permissions.PermissionLevel.ReadOnly);
 
             ActivityLog.LogActivity("User checked stocks");
             stockItemBindingSource.DataSource = ActiveStock;
@@ -47,7 +48,7 @@ namespace Stock_Manager
 
         private void dgvStocks_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to delete the stock entry for " + e.Row.Cells["ItemID"].FormattedValue.ToString() + "?",
+            if (MessageBox.Show("Are you sure you want to delete the stock entry for " + e.Row.Cells["BarcodeValue"].FormattedValue.ToString() + "?",
                 "Delete Stock Entry", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 e.Cancel = true;
         }
@@ -70,7 +71,7 @@ namespace Stock_Manager
             if (form.ShowDialog() == DialogResult.OK)
             {
                 DataGridViewCellCollection dgvc = dgvStocks.Rows[dgvStocks.RowCount - 1].Cells;
-                dgvc["ItemID"].Value = form.ItemID;
+                dgvc["BarcodeValue"].Value = form.BarcodeValue;
                 dgvc["ItemDescription"].Value = form.ItemDesciption;
                 dgvc["NumberInStock"].Value = form.NumberInStock;
                 dgvc["ItemValue"].Value = form.ItemValue;

@@ -11,18 +11,16 @@ namespace Stock_Manager
 {
     public partial class frmLogin : Form
     {
-        public Stock SelectedStock { get { return new Stock(cmbSiteSelection.SelectedValue.ToString(), false); } }
-
         public frmLogin()
         {
             InitializeComponent();
 
-            if (User.LoadAllUsers().Count == 0)
+            if (UserManagement.User.LoadAllUsers().Count == 0)
             {
                 frmCreateUser form = new frmCreateUser();
                 if (form.ShowDialog() == DialogResult.Cancel)
                 {
-                    //Close this - it's the end of the world!
+                    //Close this - no users and the current user doesn't want to make one
                     throw new MissingFieldException("No users found to login as. Please restart this program and create a new user.");
                 }
             }
@@ -38,7 +36,7 @@ namespace Stock_Manager
 
             try
             {
-                if (User.Login(txtUsername.Text, txtPassword.Text))
+                if (UserManagement.User.Login(txtUsername.Text, txtPassword.Text))
                 {
                     try
                     {

@@ -34,7 +34,7 @@
             this.dgvStocks = new System.Windows.Forms.DataGridView();
             this.btnViewScheduledOrders = new System.Windows.Forms.Button();
             this.stockItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.itemIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.barcodeValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberInStockDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.itemValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,7 +71,7 @@
             this.dgvStocks.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.dgvStocks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStocks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.itemIDDataGridViewTextBoxColumn,
+            this.barcodeValueDataGridViewTextBoxColumn,
             this.ItemDescription,
             this.numberInStockDataGridViewTextBoxColumn,
             this.itemValueDataGridViewTextBoxColumn});
@@ -99,11 +99,11 @@
             // 
             this.stockItemBindingSource.DataSource = typeof(Stock_Manager.StockItem);
             // 
-            // itemIDDataGridViewTextBoxColumn
+            // barcodeValueDataGridViewTextBoxColumn
             // 
-            this.itemIDDataGridViewTextBoxColumn.DataPropertyName = "ItemID";
-            this.itemIDDataGridViewTextBoxColumn.HeaderText = "Unique ID";
-            this.itemIDDataGridViewTextBoxColumn.Name = "itemIDDataGridViewTextBoxColumn";
+            this.barcodeValueDataGridViewTextBoxColumn.DataPropertyName = "BarcodeValue";
+            this.barcodeValueDataGridViewTextBoxColumn.HeaderText = "Barcode";
+            this.barcodeValueDataGridViewTextBoxColumn.Name = "barcodeValueDataGridViewTextBoxColumn";
             // 
             // ItemDescription
             // 
@@ -148,7 +148,7 @@
         private System.Windows.Forms.BindingSource stockItemBindingSource;
         private System.Windows.Forms.DataGridView dgvStocks;
         private System.Windows.Forms.Button btnViewScheduledOrders;
-        private System.Windows.Forms.DataGridViewTextBoxColumn itemIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn barcodeValueDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn numberInStockDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn itemValueDataGridViewTextBoxColumn;

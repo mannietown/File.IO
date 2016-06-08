@@ -7,31 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UserManagement;
 
 namespace Stock_Manager
 {
     public partial class frmChooseSite : Form
     {
-        public List<User.SiteAccess> SelectedSites
+        public Permissions SelectedSites
         {
             get
             {
-                List<User.SiteAccess> ReturnValue = new List<User.SiteAccess>();
+                List<Permissions.SiteAccess> ReturnValue = new List<Permissions.SiteAccess>();
                 foreach (object o in lsbSelected.Items)
                 {
-                    ReturnValue.Add((User.SiteAccess)o);
+                    ReturnValue.Add((Permissions.SiteAccess)o);
                 }
-                return ReturnValue;
+                return new Permissions(ReturnValue);
             }
         }
 
         public frmChooseSite()
         {
             InitializeComponent();
-            foreach (User.SiteAccess Site in User.CurrentUser.SitesTheyCanAccess)
+            foreach (Permissions.SiteAccess Site in User.CurrentUser.MyPermissions)
             {
-                if ((byte)Site.pl >= (byte)User.AreaOfAccess.PermissionLevel.ReadOnly) //At least read permissions
-                    lsbDeselected.Items.Add(Site);
+
             }
         }
 

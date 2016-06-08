@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.txtUID = new System.Windows.Forms.TextBox();
+            this.txtBarcode = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -46,11 +46,11 @@
             // 
             // txtUID
             // 
-            this.txtUID.Location = new System.Drawing.Point(90, 12);
-            this.txtUID.Name = "txtUID";
-            this.txtUID.Size = new System.Drawing.Size(200, 20);
-            this.txtUID.TabIndex = 0;
-            this.txtUID.MouseHover += new System.EventHandler(this.txtUID_MouseHover);
+            this.txtBarcode.Location = new System.Drawing.Point(90, 12);
+            this.txtBarcode.Name = "txtUID";
+            this.txtBarcode.Size = new System.Drawing.Size(200, 20);
+            this.txtBarcode.TabIndex = 0;
+            this.txtBarcode.MouseHover += new System.EventHandler(this.txtUID_MouseHover);
             // 
             // btnOK
             // 
@@ -77,9 +77,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.Size = new System.Drawing.Size(47, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Unique ID";
+            this.label1.Text = "Barcode";
             // 
             // label2
             // 
@@ -150,7 +150,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.txtUID);
+            this.Controls.Add(this.txtBarcode);
             this.Name = "frmNewStockEntry";
             this.Text = "frmNewStockEntry";
             ((System.ComponentModel.ISupportInitialize)(this.numStock)).EndInit();
@@ -162,7 +162,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtUID;
+        private System.Windows.Forms.TextBox txtBarcode;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;

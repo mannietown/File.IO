@@ -28,9 +28,7 @@ namespace Stock_Manager
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    //TODO Open a menu for selecting which form to open if the user has more access than just the checkout. 
-
-                    Application.Run(new frmCheckout(form.SelectedStock)); //Run the program
+                    Application.Run(new frmHome()); //Run the program
 
                     ActivityLog.LogActivity("User " + UserManagement.User.CurrentUser + " logged off");
                 }

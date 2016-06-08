@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-//TODO User Groups and Group management
+//TODO Clean. Seriously this is a mess. The heirarchy makes sense but it's so much effort to use!
 namespace UserManagement
 {
     [Serializable]
@@ -76,14 +77,11 @@ namespace UserManagement
 
                 while (Dataline != null)
                 {
-                    Permissions MyPermissions = new Permissions();
+                    List<Permissions.SiteAccess> SitesAccess = new List<Permissions.SiteAccess>();
                     //Skip past permissions
                     while (Dataline != null && Dataline != "")
                     {
-                        string[] Buffer = Dataline.Split('\a');
-                        AreaOfAccess.AccessArea PermissionID = (AreaOfAccess.AccessArea)Convert.ToByte(Buffer[0]);
-                        AreaOfAccess.PermissionLevel GrantPermission = (AreaOfAccess.PermissionLevel)Convert.ToByte(Buffer[1]);
-                        Permissions.Add(new AreaOfAccess(PermissionID, GrantPermission));
+                        //TODO Load permissions
 
                         Dataline = reader.ReadLine();
                     }
@@ -134,7 +132,7 @@ namespace UserManagement
                             if (Encoding.UTF8.GetBytes(Dataline) == Hash)
                             {
                                 //Success - user logged in
-                                CurrentUser = new User(UID, Firstname, Surname, Username, Hash, Permissions);
+                                CurrentUser = new User(UID, Firstname, Surname, Username, Hash, new Permissions(SitesAccess));
                                 return true;
                             }
                             else
@@ -181,9 +179,9 @@ namespace UserManagement
             //Save new user
             using (StreamWriter stream = new StreamWriter(FileLocation, true))
             {
-                foreach (AreaOfAccess sp in UserToSave.Permissions)
+                foreach (Permissions.SiteAccess sa in UserToSave.MyPermissions.SitePermissions)
                 {
-                    stream.WriteLine(sp.ToString());
+                    stream.WriteLine(sa.ToString()); //TODO Save permissions
                 }
                 stream.WriteLine(""); //Mark end of permissions
 
@@ -256,15 +254,12 @@ namespace UserManagement
 
                 while (Dataline != null)
                 {
-                    List<AreaOfAccess> Permissions = new List<AreaOfAccess>();
+                    List<Permissions.SiteAccess> Permissions = new List<Permissions.SiteAccess>();
 
                     //Load permissions
                     while (Dataline != null && Dataline != "")
                     {
-                        string[] Buffer = Dataline.Split('\a');
-                        AreaOfAccess.AccessArea PermissionID = (AreaOfAccess.AccessArea)Convert.ToByte(Buffer[0]);
-                        AreaOfAccess.PermissionLevel GrantPermission = (AreaOfAccess.PermissionLevel)Convert.ToByte(Buffer[1]);
-                        Permissions.Add(new AreaOfAccess(PermissionID, GrantPermission));
+                        //TODO Load permissions
 
                         Dataline = reader.ReadLine();
                     }
@@ -307,7 +302,7 @@ namespace UserManagement
                     if (Password == null)
                         throw new FileLoadException("Data loading error whereby the users data file appears to be corrupt");
 
-                    ReturnValue.Add(new User(UID, Firstname, Surname, LoginID, Password, Permissions));
+                    ReturnValue.Add(new User(UID, Firstname, Surname, LoginID, Password, new UserManagement.Permissions(Permissions)));
                     //Next user
                 }
             }
@@ -337,78 +332,117 @@ namespace UserManagement
         /// <param name="AreaToCheck">The area to check whether the user has access to</param>
         /// <param name="MinimumPermission">The minimum access the user needs</param>
         /// <returns></returns>
-        public bool HasAccess(AreaOfAccess.AccessArea AreaToCheck, Stock StockToAccess, AreaOfAccess.PermissionLevel MinimumPermission)
+        public bool HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea AreaToCheck, Stock_Manager.Stock StockToAccess, Permissions.PermissionLevel MinimumPermission)
         {
-            bool CanAccessSite = false;
-            foreach (SiteAccess sa in User.CurrentUser.SitesTheyCanAccess)
+            foreach (Permissions.SiteAccess sa in MyPermissions)
             {
                 if (sa.SiteID == StockToAccess.SiteID)
                 {
-                    CanAccessSite = (byte)MinimumPermission <= (byte)sa.pl;
-                    break;
-                }
-            }
-
-            if (!CanAccessSite)
-                return false;
-
-            foreach (AreaOfAccess a in Permissions)
-            {
-                if (a.Area == AreaToCheck)
-                {
-                    return (byte)MinimumPermission <= (byte)a.pl;
+                    foreach(var aa in sa.AreasOfAccess)
+                    {
+                        if (AreaToCheck == aa.Area)
+                        {
+                            return (byte)aa.pl >= (byte)MinimumPermission;
+                        }
+                    }
+                    return false;
                 }
             }
 
             return false; //Area of Access not found. Could be an old user, or invalid AreaToCheck value.
         }
 
-        public UnauthorizedAccessException PermissionDeniedMessage(AreaOfAccess.AccessArea AreaTryingToAccess, string Action, AreaOfAccess.PermissionLevel PermissionsNeeded)
+        /// <summary>
+        /// Gets whether the user has the required permissions for an activity
+        /// </summary>
+        /// <param name="AreaToCheck">The area to check whether the user has access to</param>
+        /// <param name="StocksToAccess">The stocks to check whether the user has access. Returns true if the user has access to any - not all</param>
+        /// <param name="MinimumPermission">The minimum access the user needs</param>
+        /// <returns></returns>
+        public bool HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea AreaToCheck, List<Stock_Manager.Stock> StocksToAccess, Permissions.PermissionLevel MinimumPermission)
         {
-            AreaOfAccess.PermissionLevel pl = 0;
+            foreach(Stock_Manager.Stock s in StocksToAccess)
+            {
+                if (HasAccess(AreaToCheck, s, MinimumPermission))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets whether the user has the required permissions for an activity
+        /// </summary>
+        /// <param name="AreaToCheck">The area to check whether the user has access to</param>
+        /// <param name="StocksToAccess">The stocks to check whether the user has access. Returns true if the user has access to all - not any</param>
+        /// <param name="MinimumPermission">The minimum access the user needs</param>
+        /// <returns></returns>
+        public bool HasAccessToAll(Permissions.SiteAccess.AreaOfAccess.AccessArea AreaToCheck, List<Stock_Manager.Stock> StocksToAccess, Permissions.PermissionLevel MinimumPermission)
+        {
+            foreach (Stock_Manager.Stock s in StocksToAccess)
+            {
+                if (!HasAccess(AreaToCheck, s, MinimumPermission))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public UnauthorizedAccessException PermissionDeniedMessage(string SiteTryingToAccess, Permissions.SiteAccess.AreaOfAccess.AccessArea AreaTryingToAccess, string Action, Permissions.PermissionLevel PermissionsNeeded)
+        {
+            Permissions.PermissionLevel pl = 0;
             bool plFound = false;
 
-            foreach (AreaOfAccess aa in permissions)
+            foreach (Permissions.SiteAccess sa in MyPermissions)
             {
-                if (aa.Area == AreaTryingToAccess)
+                if (sa.SiteID == SiteTryingToAccess)
                 {
-                    pl = aa.pl;
-                    plFound = true;
-                    break;
+                    foreach (Permissions.SiteAccess.AreaOfAccess aa in sa.AreasOfAccess)
+                    {
+                        if (aa.Area == AreaTryingToAccess)
+                        {
+                            pl = aa.pl;
+                            plFound = true;
+                            break;
+                        }
+                    }
                 }
             }
 
             if (!plFound)
-                pl = AreaOfAccess.PermissionLevel.NoAccess;
+                pl = Permissions.PermissionLevel.NoAccess;
 
             return new UnauthorizedAccessException(
                 "The current user (" + User.CurrentUser.LoginID +
                 ") does not have the required permissions (" +
                 Permissions.PermissionLevelToString(PermissionsNeeded) + ") for the requested action (" +
-                Action + " in " + AreaOfAccess.AccessAreaToString(AreaTryingToAccess) + ")." + Environment.NewLine +
-                "The user's permissions in this area are restricted to " + AreaOfAccess.PermissionLevelToString(pl));
+                Action + " in " + Permissions.SiteAccess.AreaOfAccess.AccessAreaToString(AreaTryingToAccess) + ")." + Environment.NewLine +
+                "The user's permissions in this area are restricted to " + Permissions.PermissionLevelToString(pl));
         }
 
 
     }
 
     [Serializable]
-    public class Permissions
+    public class Permissions : IEnumerable
     {
-        List<SiteAccess> SitePermissions { get; set; }
+        public List<SiteAccess> SitePermissions { get; set; }
 
-        public Permissions(List<SiteAccess> SitePermissions)
+        /// <summary>
+        /// Creates a new Permissions entry with no permissions granted
+        /// </summary>
+        public Permissions()
         {
-
+            SitePermissions = new List<SiteAccess>();
         }
 
         /// <summary>
-        /// Loads the user's permissions
+        /// Creates a new Permissions entry from a predefined arrangement of SiteAccesses
         /// </summary>
-        /// <param name="UserID">The user's permissions to load</param>
-        public Permissions(string UserID)
+        /// <param name="SitePermissions"></param>
+        public Permissions(List<SiteAccess> SitePermissions)
         {
-
+            this.SitePermissions = SitePermissions;
         }
 
         /// <summary>
@@ -485,13 +519,18 @@ namespace UserManagement
             }
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return SitePermissions.GetEnumerator();
+        }
+
         [Serializable]
         public class SiteAccess
         {
             public string SiteID { get { return siteid; } }
             string siteid;
             private AreaOfAccess[] areasofaccess;
-            AreaOfAccess[] AreasOfAccess { get { return areasofaccess; } }
+            public AreaOfAccess[] AreasOfAccess { get { return areasofaccess; } }
 
             public SiteAccess(string SiteID, PermissionLevel pl)
             {
@@ -506,6 +545,21 @@ namespace UserManagement
             {
                 siteid = SiteID;
                 areasofaccess = AreasThisUserCanAccess;
+            }
+
+            public bool HasAccess
+            {
+                get
+                {
+                    foreach(AreaOfAccess aa in AreasOfAccess)
+                    {
+                        if ((byte)aa.pl  > (byte)PermissionLevel.NoAccess) //Permission greater than no access
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
             }
 
             public static List<string> GetAllSites()
@@ -562,8 +616,6 @@ namespace UserManagement
                 public AccessArea Area { get; set; }
                 public PermissionLevel pl { get; set; }
 
-                public SiteAccess[] SiteAccessLevels { get; set; }
-
                 public AreaOfAccess(AccessArea Area, PermissionLevel pl)
                 {
                     this.Area = Area;
@@ -617,6 +669,8 @@ namespace UserManagement
     [Serializable]
     public class UserGroup
     {
+        //TODO Populate
+
         Permissions UserGroupPermissions { get; set; }
         string GroupID { get; set; }
 

@@ -6,12 +6,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UserManagement;
 
 namespace Stock_Manager
 {
     public class Stock
     {
-        public static Stock ActiveStock;
+        public static List<Stock> ActiveStocks;
         public List<ScheduledStockChange> ScheduledStockChanges;
         public List<StockItem> AllStock;
         private string FileLocation { get { return Program.SharedAppDataFolder + "\\" + siteid; } }
@@ -24,7 +25,7 @@ namespace Stock_Manager
             this.siteid = SiteID;
             if (CreateNew)
             {
-                if (User.CurrentUser.HasAccess(User.AreaOfAccess.AccessArea.ItemStocks, this, User.AreaOfAccess.PermissionLevel.FullAccess))
+                if (User.CurrentUser.HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, this, Permissions.PermissionLevel.FullAccess))
                 {
                     File.Delete(FileLocation); //Replace old data
 
@@ -33,8 +34,8 @@ namespace Stock_Manager
 
                     Save(); //Replace old data
                 }
-                else throw User.CurrentUser.PermissionDeniedMessage(User.AreaOfAccess.AccessArea.ItemStocks,
-                    "Create new stock database", User.AreaOfAccess.PermissionLevel.FullAccess);
+                else throw User.CurrentUser.PermissionDeniedMessage(SiteID, Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks,
+                    "Create new stock database", Permissions.PermissionLevel.FullAccess);
             }
             else
                 Load();
@@ -165,7 +166,7 @@ namespace Stock_Manager
                         }
 
                         if (!FoundMatch)
-                            throw new KeyNotFoundException("ItemID " + si.ToString() + " not found.");
+                            throw new KeyNotFoundException("BarcodeValue " + si.ToString() + " not found.");
                     }
                 }
             }
@@ -189,9 +190,9 @@ namespace Stock_Manager
         public double ItemValue { get { return itemvalue; } set { itemvalue = Math.Round(value, 2); } }
         private double itemvalue = 0;
 
-        public StockItem(string ItemID, string ItemDescription, long NumberInStock, double ItemValue)
+        public StockItem(string BarcodeValue, string ItemDescription, long NumberInStock, double ItemValue)
         {
-            barcodevalue = ItemID;
+            barcodevalue = BarcodeValue;
             itemdescription = ItemDescription;
             numberinstock = NumberInStock;
             itemvalue = ItemValue;
@@ -216,29 +217,29 @@ namespace Stock_Manager
         public bool ItemSentOrReceived { get { return itemsentorrecieved; } }
         private bool itemsentorrecieved = false;
 
-        public int this[string ItemID]
+        public int this[string BarcodeValue]
         {
             get
             {
                 foreach (StringAndInt si in OrderedItems)
                 {
-                    if (ItemID == si.s)
+                    if (BarcodeValue == si.s)
                         return si.i;
                 }
 
-                throw new KeyNotFoundException("ItemID " + ItemID + " not found");
+                throw new KeyNotFoundException("BarcodeValue " + BarcodeValue + " not found");
             }
             set
             {
                 foreach (StringAndInt si in OrderedItems)
                 {
-                    if (ItemID == si.s)
+                    if (BarcodeValue == si.s)
                     {
                         si.i = value;
                         return;
                     }
                 }
-                throw new KeyNotFoundException("ItemID " + ItemID + " not found");
+                throw new KeyNotFoundException("BarcodeValue " + BarcodeValue + " not found");
             }
         }
 
@@ -279,7 +280,7 @@ namespace Stock_Manager
         /// </summary>
         /// <param name="OrderedItems">The items being changed</param>
         /// <param name="AddToStocks">Whether the items are being removed from stock (sent out) or added to stock (recieved)</param>
-        public ScheduledStockChange(List<StringAndInt> OrderedItems, bool AddToStocks)
+        public ScheduledStockChange(Stock SelectedStock, List<StringAndInt> OrderedItems, bool AddToStocks) : base(SelectedStock)
         {
             OrderETA = DateTime.Now;
             itemsentorrecieved = true;
@@ -292,7 +293,7 @@ namespace Stock_Manager
         /// <param name="TransactionDateTime">When the order will arrive/ be sent out</param>
         /// <param name="OrderedItems">The items that will be added to stock or removed</param>
         /// <param name="AddToStocks">Whether the items are being removed from stock (sent out) or added to stock (recieved)</param>
-        public ScheduledStockChange(DateTime TransactionDateTime, List<StringAndInt> OrderedItems, bool AddToStocks)
+        public ScheduledStockChange(Stock SelectedStock, List<StringAndInt> OrderedItems, DateTime TransactionDateTime, bool AddToStocks) : base(SelectedStock)
         {
             OrderETA = TransactionDateTime;
 
@@ -326,10 +327,12 @@ namespace Stock_Manager
     {
         protected List<StringAndInt> ordereditems = new List<StringAndInt>();
         public List<StringAndInt> OrderedItems { get { return ordereditems; } }
+        private Stock stocktoexportfrom;
 
-        public Cart()
+        public Cart(Stock StockToExportFrom)
         {
             ordereditems = new List<StringAndInt>();
+            stocktoexportfrom = StockToExportFrom;
         }
 
         public void ClearCart()
@@ -347,7 +350,7 @@ namespace Stock_Manager
         {
             StockItem si = null;
 
-            foreach (StockItem siEnumerator in Stock.ActiveStock.AllStock)
+            foreach (StockItem siEnumerator in stocktoexportfrom.AllStock)
             {
                 if (siEnumerator.BarcodeValue == BarcodeScanned)
                 {
@@ -356,14 +359,14 @@ namespace Stock_Manager
             }
 
             if (si == null)
-                throw new ArgumentNullException("ItemID");
-
+                throw new KeyNotFoundException("BarcodeScanned");
+            
             if (si.NumberInStock < ItemCount)
             {
-                if (MessageBox.Show("There seems to be not enough of " + si.BarcodeValue + " in stock to carry out the order. Proceed anyway?",
+                if (MessageBox.Show("There seems to be not enough of " + BarcodeScanned + " in stock to carry out the order. Proceed anyway?",
                     "Item Not In Stock", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 { //TODO Come up with a better solution for dealing with this
-                    throw new IndexOutOfRangeException("Not enough of " + si.BarcodeValue + " in stock to carry out the order");
+                    throw new IndexOutOfRangeException("Not enough of " + BarcodeScanned + " in stock to carry out the order");
                 }
                 //else proceed
             }
