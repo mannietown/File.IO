@@ -79,6 +79,12 @@
     <Compile Include="frmStandingOrders.Designer.cs">
       <DependentUpon>frmStandingOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmUserGroups.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserGroups.Designer.cs">
+      <DependentUpon>frmUserGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logs.cs" />
     <Compile Include="frmAdminPanel.cs">
       <SubType>Form</SubType>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmStandingOrders.resx">
       <DependentUpon>frmStandingOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserGroups.resx">
+      <DependentUpon>frmUserGroups.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmViewStocks.resx">
       <DependentUpon>frmViewStocks.cs</DependentUpon>

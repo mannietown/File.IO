@@ -34,14 +34,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
-            this.cmbSiteSelection = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnLogin
             // 
             this.btnLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogin.Location = new System.Drawing.Point(147, 91);
+            this.btnLogin.Location = new System.Drawing.Point(147, 66);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(89, 27);
             this.btnLogin.TabIndex = 0;
@@ -53,7 +51,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(12, 91);
+            this.btnCancel.Location = new System.Drawing.Point(12, 66);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(89, 27);
             this.btnCancel.TabIndex = 1;
@@ -93,30 +91,11 @@
             this.txtPassword.Size = new System.Drawing.Size(165, 20);
             this.txtPassword.TabIndex = 4;
             // 
-            // comboBox1
-            // 
-            this.cmbSiteSelection.FormattingEnabled = true;
-            this.cmbSiteSelection.Location = new System.Drawing.Point(71, 64);
-            this.cmbSiteSelection.Name = "comboBox1";
-            this.cmbSiteSelection.Size = new System.Drawing.Size(165, 21);
-            this.cmbSiteSelection.TabIndex = 6;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(25, 67);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "My Site";
-            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(248, 130);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.cmbSiteSelection);
+            this.ClientSize = new System.Drawing.Size(248, 105);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.label1);
@@ -138,7 +117,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.ComboBox cmbSiteSelection;
-        private System.Windows.Forms.Label label3;
     }
 }

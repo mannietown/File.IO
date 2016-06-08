@@ -34,6 +34,8 @@ namespace Stock_Manager
         private void btnLogin_Click(object sender, EventArgs e)
         {
             //TODO Get available sites for user
+
+
             try
             {
                 if (User.Login(txtUsername.Text, txtPassword.Text))

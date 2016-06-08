@@ -42,6 +42,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnErase = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cmbGroup = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -113,7 +116,8 @@
             // 
             // grbPermissions
             // 
-            this.grbPermissions.Location = new System.Drawing.Point(12, 142);
+            this.grbPermissions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbPermissions.Location = new System.Drawing.Point(12, 197);
             this.grbPermissions.Name = "grbPermissions";
             this.grbPermissions.Size = new System.Drawing.Size(260, 83);
             this.grbPermissions.TabIndex = 8;
@@ -122,7 +126,8 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(185, 231);
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnOK.Location = new System.Drawing.Point(185, 286);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(87, 32);
             this.btnOK.TabIndex = 9;
@@ -148,8 +153,9 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(12, 231);
+            this.btnCancel.Location = new System.Drawing.Point(12, 286);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(87, 32);
             this.btnCancel.TabIndex = 12;
@@ -158,18 +164,49 @@
             // 
             // btnErase
             // 
-            this.btnErase.Location = new System.Drawing.Point(105, 231);
+            this.btnErase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnErase.Location = new System.Drawing.Point(105, 286);
             this.btnErase.Name = "btnErase";
             this.btnErase.Size = new System.Drawing.Size(74, 32);
             this.btnErase.TabIndex = 13;
             this.btnErase.Text = "Erase User";
             this.btnErase.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 144);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(61, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "User Group";
+            // 
+            // cmbGroup
+            // 
+            this.cmbGroup.FormattingEnabled = true;
+            this.cmbGroup.Location = new System.Drawing.Point(110, 142);
+            this.cmbGroup.Name = "cmbGroup";
+            this.cmbGroup.Size = new System.Drawing.Size(162, 21);
+            this.cmbGroup.TabIndex = 15;
+            this.cmbGroup.Text = "None";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(110, 169);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(162, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "Manage User Groups";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // frmCreateUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 275);
+            this.ClientSize = new System.Drawing.Size(284, 330);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.cmbGroup);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnErase);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtLoginID);
@@ -207,5 +244,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnErase;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cmbGroup;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -32,7 +32,7 @@ namespace Stock_Manager
 
                     Application.Run(new frmCheckout(form.SelectedStock)); //Run the program
 
-                    ActivityLog.LogActivity("User " + User.CurrentUser + " logged off");
+                    ActivityLog.LogActivity("User " + UserManagement.User.CurrentUser + " logged off");
                 }
 
             }

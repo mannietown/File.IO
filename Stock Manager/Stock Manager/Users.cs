@@ -7,37 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 //TODO User Groups and Group management
-namespace Stock_Manager
+namespace UserManagement
 {
     [Serializable]
     public class User
     {
-        public static readonly User SystemDefaultAdmin = new User("SysAdmin", "System", "SysAdmin", null, AreaOfAccess.GenerateDefault(AreaOfAccess.PermissionLevel.FullAccess));
+        public static readonly User SystemDefaultAdmin = new User("SysAdmin", "System", "SysAdmin", null, Permissions.GenerateDefault(Permissions.PermissionLevel.FullAccess));
         public static User CurrentUser;
 
-        List<AreaOfAccess> permissions; //TODO Encrypt permissions when saving
+        Permissions mypermissions; //TODO Encrypt permissions when saving
 
         //TODO Create default permissions
-        public List<AreaOfAccess> Permissions { get { return permissions; } }
-        
-        public SiteAccess[] SitesTheyCanAccess { get; set; }
-
-        public class SiteAccess
-        {
-            public string SiteID { get; set; }
-            public User.AreaOfAccess.PermissionLevel pl { get; set; }
-
-            public SiteAccess(string SiteID, User.AreaOfAccess.PermissionLevel pl)
-            {
-                this.SiteID = SiteID;
-                this.pl = pl;
-            }
-
-            public override string ToString()
-            {
-                return SiteID + " (" + AreaOfAccess.PermissionLevelToString(pl) + ")";
-            }
-        }
+        public Permissions MyPermissions { get { return mypermissions; } }
 
         private int? UID { get; set; }
 
@@ -53,13 +34,13 @@ namespace Stock_Manager
         /// </summary>
         public string PasswordString { set { Password = new SHA512Managed().ComputeHash(Encoding.UTF8.GetBytes(value)); } }
 
-        private static string FileLocation = Program.AppDataFolder + "\\Users.dat";
+        private static string FileLocation = Stock_Manager.Program.AppDataFolder + "\\Users.dat";
 
         /// <summary>
         /// For creating a new user
         /// </summary>
         /// <param name="Permissions">The permissions and access privelages associated with the user</param>
-        public User(string Firstname, string Surname, string LoginID, string Password, List<AreaOfAccess> Permissions, params SiteAccess[] SitesTheyCanAccess)
+        public User(string Firstname, string Surname, string LoginID, string Password, Permissions MyPermissions)
         {
             this.UID = NextAvailableUID();
 
@@ -69,12 +50,10 @@ namespace Stock_Manager
 
             PasswordString = Password;
 
-            this.SitesTheyCanAccess = SitesTheyCanAccess;
-
-            permissions = Permissions;
+            mypermissions = MyPermissions;
         }
 
-        private User(int UID, string Firstname, string Surname, string LoginID, byte[] Password, List<AreaOfAccess> Permissions, params SiteAccess[] SitesTheyCanAccess)
+        private User(int UID, string Firstname, string Surname, string LoginID, byte[] Password, Permissions MyPermissions)
         {
             this.UID = UID;
             this.Firstname = Firstname;
@@ -83,9 +62,7 @@ namespace Stock_Manager
 
             this.Password = Password;
 
-            this.SitesTheyCanAccess = SitesTheyCanAccess;
-
-            permissions = Permissions;
+            mypermissions = MyPermissions;
         }
 
         public static bool Login(string Username, string Password)
@@ -99,7 +76,7 @@ namespace Stock_Manager
 
                 while (Dataline != null)
                 {
-                    List<AreaOfAccess> Permissions = new List<AreaOfAccess>();
+                    Permissions MyPermissions = new Permissions();
                     //Skip past permissions
                     while (Dataline != null && Dataline != "")
                     {
@@ -178,7 +155,7 @@ namespace Stock_Manager
 
                     //Next user
                 }
-                
+
                 return false;
             }
         }
@@ -363,7 +340,7 @@ namespace Stock_Manager
         public bool HasAccess(AreaOfAccess.AccessArea AreaToCheck, Stock StockToAccess, AreaOfAccess.PermissionLevel MinimumPermission)
         {
             bool CanAccessSite = false;
-            foreach(SiteAccess sa in User.CurrentUser.SitesTheyCanAccess)
+            foreach (SiteAccess sa in User.CurrentUser.SitesTheyCanAccess)
             {
                 if (sa.SiteID == StockToAccess.SiteID)
                 {
@@ -391,7 +368,7 @@ namespace Stock_Manager
             AreaOfAccess.PermissionLevel pl = 0;
             bool plFound = false;
 
-            foreach(AreaOfAccess aa in permissions)
+            foreach (AreaOfAccess aa in permissions)
             {
                 if (aa.Area == AreaTryingToAccess)
                 {
@@ -405,155 +382,248 @@ namespace Stock_Manager
                 pl = AreaOfAccess.PermissionLevel.NoAccess;
 
             return new UnauthorizedAccessException(
-                "The current user (" + User.CurrentUser.LoginID + 
-                ") does not have the required permissions (" + 
-                AreaOfAccess.PermissionLevelToString(PermissionsNeeded) + ") for the requested action (" + 
-                Action + " in " + AreaOfAccess.AccessAreaToString(AreaTryingToAccess) + ")." + Environment.NewLine + 
+                "The current user (" + User.CurrentUser.LoginID +
+                ") does not have the required permissions (" +
+                Permissions.PermissionLevelToString(PermissionsNeeded) + ") for the requested action (" +
+                Action + " in " + AreaOfAccess.AccessAreaToString(AreaTryingToAccess) + ")." + Environment.NewLine +
                 "The user's permissions in this area are restricted to " + AreaOfAccess.PermissionLevelToString(pl));
         }
 
-        [Serializable]
-        public class AreaOfAccess
+
+    }
+
+    [Serializable]
+    public class Permissions
+    {
+        List<SiteAccess> SitePermissions { get; set; }
+
+        public Permissions(List<SiteAccess> SitePermissions)
         {
-            public enum PermissionLevel : byte
+
+        }
+
+        /// <summary>
+        /// Loads the user's permissions
+        /// </summary>
+        /// <param name="UserID">The user's permissions to load</param>
+        public Permissions(string UserID)
+        {
+
+        }
+
+        /// <summary>
+        /// Loads encrypted permissions
+        /// </summary>
+        /// <param name="EncryptedPermissions">The encrypted permissions to load</param>
+        public Permissions(byte EncryptedPermissions)
+        {
+            //TODO Populate
+
+        }
+
+        public static Permissions GenerateDefault(List<string> Sites, PermissionLevel pl) //TODO Generate default user for the built-in admin
+        {
+            List<SiteAccess> SiteAccessToSet = new List<SiteAccess>();
+            foreach (string site in Sites)
+                SiteAccessToSet.Add(new SiteAccess(site, pl));
+
+            return new Permissions(SiteAccessToSet);
+        }
+
+        public static Permissions GenerateDefault(PermissionLevel PermissionsToGrant)
+        {
+            return GenerateDefault(PermissionsToGrant, SiteAccess.GetAllSites());
+        }
+
+        public static Permissions GenerateDefault(PermissionLevel PermissionToGrant, List<string> SitesToGrantAccess)
+        {
+            List<SiteAccess> SitesToGrant = new List<SiteAccess>();
+            foreach (string Site in SitesToGrantAccess)
             {
-                /// <summary>
-                /// No access privelages granted. Cannot access this area of the system.
-                /// </summary>
-                NoAccess = 0,
+                SitesToGrant.Add(new SiteAccess(Site, PermissionToGrant));
+            }
+            return new Permissions(SitesToGrant);
+        }
 
-                /// <summary>
-                /// Can read this area of the system, but cannot make changes
-                /// </summary>
-                ReadOnly,
+        public enum PermissionLevel : byte
+        {
+            /// <summary>
+            /// No access privelages granted. Cannot access this area of the system.
+            /// </summary>
+            NoAccess = 0,
 
-                /// <summary>
-                /// Can read and edit this area of the system, but cannot delete or create entries
-                /// </summary>
-                ReadAndEdit,
+            /// <summary>
+            /// Can read this area of the system, but cannot make changes
+            /// </summary>
+            ReadOnly,
 
-                /// <summary>
-                /// Full access to this area of the system
-                /// </summary>
-                FullAccess
+            /// <summary>
+            /// Can read and edit this area of the system, but cannot delete or create entries
+            /// </summary>
+            ReadAndEdit,
+
+            /// <summary>
+            /// Full access to this area of the system
+            /// </summary>
+            FullAccess
+        }
+
+        public static string PermissionLevelToString(PermissionLevel pl)
+        {
+            switch (pl)
+            {
+                case PermissionLevel.NoAccess:
+                    return "No Access";
+                case PermissionLevel.ReadOnly:
+                    return "Read Only";
+                case PermissionLevel.ReadAndEdit:
+                    return "Read and Edit";
+                case PermissionLevel.FullAccess:
+                    return "Full Access";
+                default:
+                    throw new ArgumentOutOfRangeException("PermissionLevel ID: " + (byte)pl + " not found");
+            }
+        }
+
+        [Serializable]
+        public class SiteAccess
+        {
+            public string SiteID { get { return siteid; } }
+            string siteid;
+            private AreaOfAccess[] areasofaccess;
+            AreaOfAccess[] AreasOfAccess { get { return areasofaccess; } }
+
+            public SiteAccess(string SiteID, PermissionLevel pl)
+            {
+                siteid = SiteID;
+                areasofaccess = new AreaOfAccess[AreaOfAccess.AccessAreasCount()];
+
+                for(byte Index = 0; Index < areasofaccess.Length; Index++)
+                    areasofaccess[Index] = new AreaOfAccess((AreaOfAccess.AccessArea)Index, pl);
             }
 
-            public enum AccessArea : byte
+            public SiteAccess(string SiteID, AreaOfAccess[] AreasThisUserCanAccess)
             {
-                /// <summary>
-                /// Access to edit, view, create or delete users
-                /// </summary>
-                Users = 0,
-
-                /// <summary>
-                /// Access to the admin panel section which includes things like login times for users
-                /// </summary>
-                AdminSettings,
-
-                /// <summary>
-                /// Immediate orders such as over-the-counter orders
-                /// </summary>
-                ImmediateOrders,
-
-                /// <summary>
-                /// Scheduled outgoing customer orders
-                /// </summary>
-                OutgoingOrders,
-
-                /// <summary>
-                /// Scheduled incoming orders, such as stock bolstering orders
-                /// </summary>
-                IncomingOrders,
-
-                /// <summary>
-                /// Current item stocks
-                /// </summary>
-                ItemStocks
+                siteid = SiteID;
+                areasofaccess = AreasThisUserCanAccess;
             }
 
-            public AccessArea Area { get; set; }
-            public PermissionLevel pl { get; set; }
-
-            public SiteAccess[] SiteAccessLevels { get; set; }
-
-            public AreaOfAccess(AccessArea Area, PermissionLevel pl, params SiteAccess[] SiteAccessLevels)
+            public static List<string> GetAllSites()
             {
-                this.Area = Area;
-                this.pl = pl;
-                this.SiteAccessLevels = SiteAccessLevels;
+                throw new NotImplementedException();
             }
 
-            public static List<AreaOfAccess> GenerateDefault()
+            public static void CreateNewSite(string SiteID)
             {
-                return GenerateDefault(PermissionLevel.ReadOnly);
-            }
-
-            public static List<AreaOfAccess> GenerateDefault(PermissionLevel pl)
-            {
-                List<AreaOfAccess> ReturnValue = new List<AreaOfAccess>();
-
-                ReturnValue.Add(new AreaOfAccess(AccessArea.Users, pl));
-                ReturnValue.Add(new AreaOfAccess(AccessArea.AdminSettings, pl));
-                ReturnValue.Add(new AreaOfAccess(AccessArea.ImmediateOrders, pl));
-                ReturnValue.Add(new AreaOfAccess(AccessArea.OutgoingOrders, pl));
-                ReturnValue.Add(new AreaOfAccess(AccessArea.IncomingOrders, pl));
-                ReturnValue.Add(new AreaOfAccess(AccessArea.ItemStocks, pl));
-
-                return ReturnValue;
-            }
-
-            public string PermissionLevelToString()
-            {
-                return PermissionLevelToString(pl);
-            }
-
-            public static string PermissionLevelToString(PermissionLevel pl)
-            {
-                switch (pl)
-                {
-                    case PermissionLevel.NoAccess:
-                        return "No Access";
-                    case PermissionLevel.ReadOnly:
-                        return "Read Only";
-                    case PermissionLevel.ReadAndEdit:
-                        return "Read and Edit";
-                    case PermissionLevel.FullAccess:
-                        return "Full Access";
-                    default:
-                        throw new ArgumentOutOfRangeException("PermissionLevel ID: " + (byte)pl + " not found");
-                }
-            }
-
-            public string AccessAreaToString()
-            {
-                return AccessAreaToString(Area);
-            }
-
-            public static string AccessAreaToString(AccessArea area)
-            {
-                switch (area)
-                {
-                    case AccessArea.Users:
-                        return "Logins";
-                    case AccessArea.AdminSettings:
-                        return "Administrator Settings";
-                    case AccessArea.ImmediateOrders:
-                        return "Over-The-Counter Orders";
-                    case AccessArea.IncomingOrders:
-                        return "Stock Orders";
-                    case AccessArea.OutgoingOrders:
-                        return "Customer Delivery Orders";
-                    case AccessArea.ItemStocks:
-                        return "Stock Management";
-                    default:
-                        throw new ArgumentOutOfRangeException("AccessArea ID: " + (byte)area + " not found");
-                }
+                throw new NotImplementedException();
             }
 
             public override string ToString()
             {
-                return ((byte)Area).ToString() + "\a" + ((byte)pl).ToString();
+                return SiteID;
             }
+
+            [Serializable]
+            public class AreaOfAccess
+            {
+                public enum AccessArea : byte
+                {
+                    /// <summary>
+                    /// Access to edit, view, create or delete users
+                    /// </summary>
+                    Users = 0,
+
+                    /// <summary>
+                    /// Access to the admin panel section which includes things like login times for users
+                    /// </summary>
+                    AdminSettings,
+
+                    /// <summary>
+                    /// Immediate orders such as over-the-counter orders
+                    /// </summary>
+                    ImmediateOrders,
+
+                    /// <summary>
+                    /// Scheduled outgoing customer orders
+                    /// </summary>
+                    OutgoingOrders,
+
+                    /// <summary>
+                    /// Scheduled incoming orders, such as stock bolstering orders
+                    /// </summary>
+                    IncomingOrders,
+
+                    /// <summary>
+                    /// Current item stocks
+                    /// </summary>
+                    ItemStocks
+                }
+
+                public AccessArea Area { get; set; }
+                public PermissionLevel pl { get; set; }
+
+                public SiteAccess[] SiteAccessLevels { get; set; }
+
+                public AreaOfAccess(AccessArea Area, PermissionLevel pl)
+                {
+                    this.Area = Area;
+                    this.pl = pl;
+                }
+
+                public static byte AccessAreasCount()
+                {
+                    return (byte)Enum.GetNames(typeof(AreaOfAccess.AccessArea)).Length;
+                }
+
+                public string AccessAreaToString()
+                {
+                        return AccessAreaToString(Area);
+                }
+
+                public static string AccessAreaToString(AccessArea area)
+                {
+                    switch (area)
+                    {
+                        case AccessArea.Users:
+                            return "Logins";
+                        case AccessArea.AdminSettings:
+                            return "Administrator Settings";
+                        case AccessArea.ImmediateOrders:
+                            return "Over-The-Counter Orders";
+                        case AccessArea.IncomingOrders:
+                            return "Stock Orders";
+                        case AccessArea.OutgoingOrders:
+                            return "Customer Delivery Orders";
+                        case AccessArea.ItemStocks:
+                            return "Stock Management";
+                        default:
+                            throw new ArgumentOutOfRangeException("AccessArea ID: " + (byte)area + " not found");
+                    }
+                }
+
+                public string PermissionLevelToString()
+                {
+                    return Permissions.PermissionLevelToString(pl);
+                }
+
+                public override string ToString()
+                {
+                    return ((byte)Area).ToString() + "\a" + ((byte)pl).ToString();
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public class UserGroup
+    {
+        Permissions UserGroupPermissions { get; set; }
+        string GroupID { get; set; }
+
+        public UserGroup(string GroupID, Permissions UserGroupPermissions)
+        {
+            this.GroupID = GroupID;
+            this.UserGroupPermissions = UserGroupPermissions;
         }
     }
 }

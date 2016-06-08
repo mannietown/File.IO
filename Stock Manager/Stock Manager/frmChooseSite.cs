@@ -12,13 +12,26 @@ namespace Stock_Manager
 {
     public partial class frmChooseSite : Form
     {
+        public List<User.SiteAccess> SelectedSites
+        {
+            get
+            {
+                List<User.SiteAccess> ReturnValue = new List<User.SiteAccess>();
+                foreach (object o in lsbSelected.Items)
+                {
+                    ReturnValue.Add((User.SiteAccess)o);
+                }
+                return ReturnValue;
+            }
+        }
+
         public frmChooseSite()
         {
             InitializeComponent();
-            foreach (User.SiteAccess SiteID in User.CurrentUser.SitesTheyCanAccess)
+            foreach (User.SiteAccess Site in User.CurrentUser.SitesTheyCanAccess)
             {
-                if ((byte)SiteID.pl >= (byte)User.AreaOfAccess.PermissionLevel.ReadOnly) //At least read permissions
-                    lsbDeselected.Items.Add(SiteID);
+                if ((byte)Site.pl >= (byte)User.AreaOfAccess.PermissionLevel.ReadOnly) //At least read permissions
+                    lsbDeselected.Items.Add(Site);
             }
         }
 
@@ -86,6 +99,26 @@ namespace Stock_Manager
                     lsbSelected.Items.Remove(o);
                 }
             }
+        }
+
+        private void frmChooseSite_Load(object sender, EventArgs e)
+        {
+            if (lsbDeselected.Items.Count == 1)
+            {
+                lsbSelected.Items.Add(lsbDeselected.Items[0]);
+                lsbDeselected.Items.Clear();
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else if (lsbDeselected.Items.Count == 0)
+            {
+                Exception ex = new UnauthorizedAccessException("This user is configured to be unable to access any sites.");
+                Error_Log.LogError(ex, Error_Log.ShowError.ShowUserFriendlyMessage);
+                DialogResult = DialogResult.Cancel;
+                Close();
+            }
+            else Opacity = 100; //Make form visible. Set to invisible by default
         }
     }
 }
