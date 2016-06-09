@@ -7,31 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using UserManagement;
+using Program_Logs;
+//using UserManagement;
+using UserManagement.PermissionManagement;
 
-namespace Stock_Manager
+namespace Shopping_UI
 {
     public partial class frmChooseSite : Form
     {
-        public Permissions SelectedSites
+        public UserPermission SelectedSites
         {
             get
             {
-                List<Permissions.SiteAccess> ReturnValue = new List<Permissions.SiteAccess>();
+                List<SiteAccess> ReturnValue = new List<SiteAccess>();
                 foreach (object o in lsbSelected.Items)
                 {
-                    ReturnValue.Add((Permissions.SiteAccess)o);
+                    ReturnValue.Add((SiteAccess)o);
                 }
-                return new Permissions(ReturnValue);
+                return new UserPermission(ReturnValue);
             }
         }
 
         public frmChooseSite()
         {
             InitializeComponent();
-            foreach (Permissions.SiteAccess Site in User.CurrentUser.MyPermissions)
+            foreach (SiteAccess Site in UserPermission.MyPermissions)
             {
-
+                lsbDeselected.Items.Add(Site);
             }
         }
 

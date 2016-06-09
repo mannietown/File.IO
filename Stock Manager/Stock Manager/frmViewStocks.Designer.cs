@@ -1,4 +1,4 @@
-﻿namespace Stock_Manager
+﻿namespace Shopping_UI
 {
     partial class frmViewStocks
     {
@@ -97,7 +97,7 @@
             // 
             // stockItemBindingSource
             // 
-            this.stockItemBindingSource.DataSource = typeof(Stock_Manager.StockItem);
+            this.stockItemBindingSource.DataSource = typeof(StockManager.StockItem);
             // 
             // barcodeValueDataGridViewTextBoxColumn
             // 

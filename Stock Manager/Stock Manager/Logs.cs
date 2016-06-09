@@ -8,9 +8,10 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
+using Shopping_UI;
 using UserManagement;
 
-namespace Stock_Manager
+namespace Program_Logs
 {
     public static class Error_Log
     {

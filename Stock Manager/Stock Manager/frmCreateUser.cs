@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UserManagement;
 
-namespace Stock_Manager
+namespace Shopping_UI
 {
     public partial class frmCreateUser : Form
     {

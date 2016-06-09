@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Program_Logs;
 
 //TODO Convert to server based operation
-namespace Stock_Manager
+namespace Shopping_UI
 {
     static class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace Stock_Manager
+﻿namespace Shopping_UI
 {
     partial class frmChooseSite
     {

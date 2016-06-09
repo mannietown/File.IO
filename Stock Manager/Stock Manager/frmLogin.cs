@@ -6,8 +6,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using Program_Logs;
 
-namespace Stock_Manager
+namespace Shopping_UI
 {
     public partial class frmLogin : Form
     {

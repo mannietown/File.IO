@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Stock_Manager
+namespace Shopping_UI
 {
     public partial class frmAdminPanel : Form
     {

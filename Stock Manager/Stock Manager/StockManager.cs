@@ -7,15 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UserManagement;
+using UserManagement.PermissionManagement;
 
-namespace Stock_Manager
+namespace StockManager
 {
     public class Stock
     {
         public static List<Stock> ActiveStocks;
         public List<ScheduledStockChange> ScheduledStockChanges;
         public List<StockItem> AllStock;
-        private string FileLocation { get { return Program.SharedAppDataFolder + "\\" + siteid; } }
+        private string FileLocation { get { return Shopping_UI.Program.SharedAppDataFolder + "\\" + siteid; } }
 
         private string siteid;
         public string SiteID { get { return siteid; } }
@@ -25,7 +26,7 @@ namespace Stock_Manager
             this.siteid = SiteID;
             if (CreateNew)
             {
-                if (User.CurrentUser.HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, this, Permissions.PermissionLevel.FullAccess))
+                if (User.CurrentUser.HasAccess(AreaOfAccess.ItemStocks, SiteID, PermissionLevel.FullAccess))
                 {
                     File.Delete(FileLocation); //Replace old data
 
@@ -34,8 +35,8 @@ namespace Stock_Manager
 
                     Save(); //Replace old data
                 }
-                else throw User.CurrentUser.PermissionDeniedMessage(SiteID, Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks,
-                    "Create new stock database", Permissions.PermissionLevel.FullAccess);
+                else throw User.CurrentUser.PermissionDeniedMessage(SiteID, AreaOfAccess.ItemStocks,
+                    "Create new stock database", PermissionLevel.FullAccess);
             }
             else
                 Load();

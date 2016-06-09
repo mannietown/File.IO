@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using StockManager;
 using UserManagement;
+using UserManagement.PermissionManagement;
 
-namespace Stock_Manager
+namespace Shopping_UI
 {
     public partial class frmHome : Form
     {
@@ -18,15 +20,15 @@ namespace Stock_Manager
         {
             InitializeComponent();
 
-            if (User.CurrentUser.HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea.AdminSettings, Stock.ActiveStocks, Permissions.PermissionLevel.ReadOnly))
+            if (User.CurrentUser.HasAccess(AreaOfAccess.AdminSettings, Stock.ActiveStocks, PermissionLevel.ReadOnly))
             {
                 btnAdminPanel.Enabled = true;
             }
-            if (User.CurrentUser.HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea.ImmediateOrders, Stock.ActiveStocks, Permissions.PermissionLevel.ReadOnly))
+            if (User.CurrentUser.HasAccess(AreaOfAccess.ImmediateOrders, Stock.ActiveStocks, PermissionLevel.ReadOnly))
             {
                 btnCheckout.Enabled = true;
             }
-            if (User.CurrentUser.HasAccess(Permissions.SiteAccess.AreaOfAccess.AccessArea.ItemStocks, Stock.ActiveStocks, Permissions.PermissionLevel.ReadOnly))
+            if (User.CurrentUser.HasAccess(AreaOfAccess.ItemStocks, Stock.ActiveStocks, PermissionLevel.ReadOnly))
             {
                 btnStockManager.Enabled = true;
             }
