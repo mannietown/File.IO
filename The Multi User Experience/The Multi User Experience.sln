@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{6EB84416-5DE7-4DCF-B0E6-8A68867FB94D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Battleships", "Battleships", "{C7AA9042-4521-4F04-BDBA-008DC46EEDAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player", "Player\Player.csproj", "{E790694B-0F93-4ED6-A75F-31C491E7B811}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server Host", "Server Host\Server Host.csproj", "{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +27,20 @@ Global
 		{6EB84416-5DE7-4DCF-B0E6-8A68867FB94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EB84416-5DE7-4DCF-B0E6-8A68867FB94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EB84416-5DE7-4DCF-B0E6-8A68867FB94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E790694B-0F93-4ED6-A75F-31C491E7B811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E790694B-0F93-4ED6-A75F-31C491E7B811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E790694B-0F93-4ED6-A75F-31C491E7B811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E790694B-0F93-4ED6-A75F-31C491E7B811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E790694B-0F93-4ED6-A75F-31C491E7B811} = {C7AA9042-4521-4F04-BDBA-008DC46EEDAF}
+		{C2AE1031-AB0D-4E6B-A7A5-BDAD9615026F} = {C7AA9042-4521-4F04-BDBA-008DC46EEDAF}
 	EndGlobalSection
 EndGlobal
